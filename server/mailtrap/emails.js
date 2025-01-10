@@ -1,7 +1,7 @@
-import { VERIFICATION_EMAIL_TEMPLATE } from "./emailTemplates.js";
-import { client, sender } from "./mailtrap.config.js";
+const { VERIFICATION_EMAIL_TEMPLATE } = require("./emailTemplates")
+const { client, sender } = require("./mailtrap.config.js")
 
-export const sendVerificationEmail = async (email, verificationToken) => {
+const sendVerificationEmail = async (email, verificationToken) => {
     const recipients = [{ email }]
     try {
         const response = await client.send({
@@ -18,3 +18,5 @@ export const sendVerificationEmail = async (email, verificationToken) => {
         throw new Error(`Error sending verification email: ${error}`)
     }
 }
+
+module.exports = { sendVerificationEmail }

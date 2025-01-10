@@ -1,9 +1,9 @@
-import { User } from "../models/user.model.js"
-import bcryptjs from "bcryptjs"
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js"
-import { sendVerificationEmail } from "../mailtrap/emails.js"
+const bcryptjs = require('bcryptjs')
+const { User } = require('../models/user.model')
+const { generateTokenAndSetCookie } = require('../utils/generateTokenAndSetCookie.js')
+const { sendVerificationEmail } = require('../mailtrap/emails.js')
 
-export const signup = async (req, res) => {
+const signup = async (req, res) => {
     const { name, email, password } = req.body
 
     try {
@@ -46,9 +46,11 @@ export const signup = async (req, res) => {
         res.status(400).json({ success: false, message: error.message })
     }
 }
-export const login = async (req, res) => {
+const login = async (req, res) => {
     res.send("Login Route")
 }
-export const logout = async (req, res) => {
+const logout = async (req, res) => {
     res.send("Logout Route")
 }
+
+module.exports = { signup, login, logout }

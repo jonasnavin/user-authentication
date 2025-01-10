@@ -1,7 +1,7 @@
-import express from "express"
-import { connectDB } from "./db/connectDB.js"
-import authRoutes from "./routes/auth.route.js"
-import dotenv from "dotenv"
+const express = require("express")
+const { connectDB } = require("./db/connectDB")
+const authRoutes = require("./routes/auth.route")
+const dotenv = require("dotenv")
 
 dotenv.config()
 
