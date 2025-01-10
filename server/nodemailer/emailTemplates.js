@@ -1,4 +1,4 @@
-export const VERIFICATION_EMAIL_TEMPLATE = `
+const VERIFICATION_EMAIL_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,9 +26,9 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
   </div>
 </body>
 </html>
-`;
+`
 
-export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
+const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,9 +63,9 @@ export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
   </div>
 </body>
 </html>
-`;
+`
 
-export const PASSWORD_RESET_REQUEST_TEMPLATE = `
+const PASSWORD_RESET_REQUEST_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,4 +92,53 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
   </div>
 </body>
 </html>
-`;
+`
+
+const WELCOME_EMAIL_TEMPLATE = `
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to [Company Name]</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 0; padding: 0;">
+    <div
+        style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+        <div style="text-align: center; color: #007bff;">
+            <h1 style="margin: 0; font-size: 32px;">Welcome to [Company Name]!</h1>
+        </div>
+
+        <div style="font-size: 16px; line-height: 1.5; color: #555; text-align: center; margin-top: 20px;">
+            <p>Hi [Recipient's Name],</p>
+            <p>Your account has been successfully verified! We're thrilled to have you as part of our community.</p>
+            <p>Get started now and explore all that we have to offer!</p>
+
+            <a href="[Home Page]"
+                style="display: inline-block; background-color: #28a745; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 30px; text-align: center">
+                Get Started
+            </a>
+        </div>
+
+        <div style="text-align: center; font-size: 14px; color: #888; margin-top: 40px;">
+            <p>
+                Need help? Reach us at
+                <a href="mailto:[Support Email]" style="color: #007bff; text-decoration: none;">
+                    Support Email
+                </a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
+`
+
+module.exports = {
+  VERIFICATION_EMAIL_TEMPLATE,
+  PASSWORD_RESET_SUCCESS_TEMPLATE,
+  PASSWORD_RESET_REQUEST_TEMPLATE,
+  WELCOME_EMAIL_TEMPLATE
+}
