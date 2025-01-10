@@ -1,12 +1,10 @@
 const express = require("express")
-const { connectDB } = require("./db/connectDB")
-const authRoutes = require("./routes/auth.route")
-const dotenv = require("dotenv")
 
-dotenv.config()
+const { connectDB } = require("./db/connectDB")
+const authRoutes = require("./routes/authRoutes")
+const { PORT } = require("./configs/config")
 
 const app = express()
-const PORT = process.env.PORT || 5000
 
 app.use(express.json())
 

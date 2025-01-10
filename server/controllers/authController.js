@@ -1,7 +1,8 @@
 const bcryptjs = require('bcryptjs')
-const { User } = require('../models/user.model')
-const { generateTokenAndSetCookie } = require('../utils/generateTokenAndSetCookie.js')
-const { sendVerificationEmail, sendWelcomeEmail } = require('../nodemailer/emails.js')
+const { User } = require('../models/userModel')
+const { generateTokenAndSetCookie } = require('../utils/generateTokenAndSetCookie')
+const { sendVerificationEmail } = require('../email/sendVerificationEmail')
+const { sendWelcomeEmail } = require('../email/sendWelcomeEmail')
 
 const signup = async (req, res) => {
     const { name, email, password } = req.body
@@ -55,12 +56,10 @@ const verifyEmail = async (req, res) => {
             verificationTokenExpiresAt: { $gt: Date.now() }
         })
 
-        if(!user) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid or expired verification code"
-            })
-        }
+        if (!user) res.status(400).json({
+            success: false,
+            message: "Invalid or expired verification code"
+        })
 
         user.isVerified = true
         user.verificationToken = undefined
@@ -84,11 +83,65 @@ const verifyEmail = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    res.send("Login Route")
+
+    try {
+        const { email, password } = req.body
+
+        const user = await User.findOne({ email })
+        if (!user) return res.status(400).json({
+            success: false,
+            message: "Invalid user name"
+        })
+
+        const isPasswordValid = await bcryptjs.compare(password, user.password)
+        if (!isPasswordValid) return res.status(400).json({
+            success: false,
+            message: "Invalid password"
+        })
+
+        generateTokenAndSetCookie(res, user._id)
+
+        user.lastLogin = new Date()
+        await user.save()
+
+        res.status(200).json({
+            success: true,
+            message: "Logged in successfully",
+            user: {
+                ...user._doc,
+                password: undefined
+            }
+        })
+
+    } catch (error) {
+        console.log("Login failed")
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
+    }
 }
 
 const logout = async (req, res) => {
-    res.send("Logout Route")
+    res.clearCookie("token")
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully"
+    })
 }
 
-module.exports = { signup, login, logout, verifyEmail }
+const forgotPassword = async (req, res) => {
+    const { email } = req.body
+    try {
+        const user = await User.findOne({ email })
+        if (!email) return res.status(400).json({
+            success: false,
+            message: "Invalid user"
+        })
+
+    } catch (error) {
+        console.log("")
+    }
+}
+
+module.exports = { signup, login, logout, verifyEmail, forgotPassword }
