@@ -1,8 +1,11 @@
 const bcryptjs = require('bcryptjs')
+const crypto = require('crypto')
 const { User } = require('../models/userModel')
 const { generateTokenAndSetCookie } = require('../utils/generateTokenAndSetCookie')
 const { sendVerificationEmail } = require('../email/sendVerificationEmail')
 const { sendWelcomeEmail } = require('../email/sendWelcomeEmail')
+const { sendPasswordResetEmail } = require('../email/sendPasswordResetEmail')
+const { CLIENT_URL } = require('../configs/config')
 
 const signup = async (req, res) => {
     const { name, email, password } = req.body
@@ -44,7 +47,11 @@ const signup = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message })
+        console.log("Sign up failed", error)
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
     }
 }
 
@@ -78,7 +85,11 @@ const verifyEmail = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error)
+        console.log("Email verification failed", error)
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
     }
 }
 
@@ -114,7 +125,7 @@ const login = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Login failed")
+        console.log("Login failed", error)
         res.status(400).json({
             success: false,
             message: error.message
@@ -134,13 +145,32 @@ const forgotPassword = async (req, res) => {
     const { email } = req.body
     try {
         const user = await User.findOne({ email })
-        if (!email) return res.status(400).json({
+        if (!user) return res.status(400).json({
             success: false,
             message: "Invalid user"
         })
 
+        const resetToken = crypto.randomBytes(20).toString('hex')
+        const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000
+
+        user.resetPasswordToken = resetToken
+        user.resetPasswordExpiresAt = resetTokenExpiresAt
+
+        await user.save()
+
+        await sendPasswordResetEmail(user.email, `${CLIENT_URL}/reset-password/${resetToken}`)
+
+        res.status(200).json({
+            success: true,
+            messgae: "Password reset link sent successfully"
+        })
+
     } catch (error) {
-        console.log("")
+        console.log("Forget password operation failed", error)
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
     }
 }
 
