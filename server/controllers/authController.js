@@ -6,6 +6,7 @@ const { sendVerificationEmail } = require('../email/sendVerificationEmail')
 const { sendWelcomeEmail } = require('../email/sendWelcomeEmail')
 const { sendPasswordResetEmail } = require('../email/sendPasswordResetEmail')
 const { CLIENT_URL } = require('../configs/config')
+const { sendPasswordResetSuccessEmail } = require('../email/sendPasswordResetSuccessEmail')
 
 const signup = async (req, res) => {
     const { name, email, password } = req.body
@@ -174,4 +175,36 @@ const forgotPassword = async (req, res) => {
     }
 }
 
-module.exports = { signup, login, logout, verifyEmail, forgotPassword }
+const resetPassword = async (req, res) => {
+    const { token } = req.params
+    try {
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpiresAt: { $gt: Date.now() }
+        })
+        if (!user) return res.status(400).json({
+            success: false,
+            message: "Invalid or expired reset token"
+        })
+
+        user.resetPasswordToken = undefined
+        user.resetPasswordExpiresAt = undefined
+
+        await user.save()
+
+        await sendPasswordResetSuccessEmail(user.email)
+
+        res.status(200).json({
+            success: true,
+            message: "Password reset successful"
+        })
+    } catch (error) {
+        console.log("Password reset failed", error)
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+module.exports = { signup, login, logout, verifyEmail, forgotPassword, resetPassword }
