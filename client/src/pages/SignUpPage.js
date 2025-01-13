@@ -2,13 +2,16 @@ import { motion } from 'framer-motion'
 import Input from '../components/Input'
 import { User, Mail, Lock } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter'
 
 const SignUpPage = () => {
 
+    const navigate = useNavigate()
+
     const handleSingup = (e) => {
         e.preventDefault()
+        navigate('/verify-email')
     }
 
     const [name, setName] = useState('')
