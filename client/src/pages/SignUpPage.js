@@ -4,19 +4,31 @@ import { User, Mail, Lock } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter'
+import axios from 'axios'
 
 const SignUpPage = () => {
-
-    const navigate = useNavigate()
-
-    const handleSingup = (e) => {
-        e.preventDefault()
-        navigate('/verify-email')
-    }
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const navigate = useNavigate()
+
+    const [errorMessage, setErrorMessage] = useState('')
+
+    const API_URL = "http://localhost:5000/api/auth"
+
+    const handleSingup = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await axios.post(`${API_URL}/signup`, { name, email, password })
+            console.log(response)
+            navigate('/verify-email')
+        } catch (error) {
+            console.log(error.response.data.message)
+            setErrorMessage(error.response.data.message)
+        }
+    }
 
     return (
         <motion.div
@@ -27,7 +39,7 @@ const SignUpPage = () => {
         >
             <div className='p-8'>
                 <h2
-                    className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'
+                    className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-sky-400 to-cyan-500 text-transparent bg-clip-text'
                 >
                     Create Account
                 </h2>
@@ -37,7 +49,7 @@ const SignUpPage = () => {
                         type="text"
                         placeholder="Full Name"
                         value={name}
-                        name="User Name"
+                        name="Name"
                         onChange={e => setName(e.target.value)}
                     />
                     <Input
@@ -54,9 +66,12 @@ const SignUpPage = () => {
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                     />
+                    <p className='text-md text-red-500'>
+                        {errorMessage}
+                    </p>
                     <PasswordStrengthMeter password={password} />
                     <motion.button
-                        className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset:gray-900 transition duration-200'
+                        className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-sky-500 to-cyan-600 text-white font-bold rounded-lg shadow-lg hover:from-sky-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset:gray-900 transition duration-200'
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         type='submit'
@@ -70,7 +85,7 @@ const SignUpPage = () => {
                     Already have an account?{" "}
                     <Link
                         to={'/login'}
-                        className='text-green-400 hover:underline'
+                        className='text-sky-400 hover:underline'
                     >
                         Login
                     </Link>

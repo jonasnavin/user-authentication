@@ -28,8 +28,6 @@ const PasswordCriteria = ({ password }) => {
     )
 }
 
-
-
 const PasswordStrengthMeter = ({ password }) => {
 
     const getStrength = (pass) => {
