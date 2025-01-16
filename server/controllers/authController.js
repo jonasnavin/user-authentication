@@ -17,9 +17,9 @@ const signup = async (req, res) => {
         }
         const userAlreadyExists = await User.findOne({ email })
 
-        if (userAlreadyExists) {
-            return res.status(400).json({ success: false, message: "User already exists" })
-        }
+        // if (userAlreadyExists) {
+        //     return res.status(400).json({ success: false, message: "User already exists" })
+        // }
 
         const hashedPassword = await bcryptjs.hash(password, 10)
         const verificationToken = Math.floor(100000 + Math.random() * 900000).toString()
@@ -58,13 +58,14 @@ const signup = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
     const { code } = req.body
+    console.log(code)
     try {
         const user = await User.findOne({
             verificationToken: code,
             verificationTokenExpiresAt: { $gt: Date.now() }
         })
 
-        if (!user) res.status(400).json({
+        if (!user) return res.status(400).json({
             success: false,
             message: "Invalid or expired verification code"
         })
