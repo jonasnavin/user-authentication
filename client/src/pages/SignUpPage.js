@@ -84,9 +84,12 @@ const SignUpPage = () => {
                         minLength="8"
                         onChange={e => setPassword(e.target.value)}
                     />
-                    <p className='text-md text-red-500'>
-                        {error}
-                    </p>
+                    {error ? (
+                        <p className='text-md text-red-500'>
+                            {error}
+                        </p>
+                    ) : (null)
+                    }
                     <PasswordStrengthMeter password={password} />
                     <motion.button
                         className={

@@ -120,10 +120,12 @@ const EmailVerificationPage = () => {
                             />
                         ))}
                     </div>
-
-                    <p className='text-md text-red-500'>
-                        {error}
-                    </p>
+                    {error ? (
+                        <p className='text-md text-red-500'>
+                            {error}
+                        </p>
+                    ) : (null)
+                    }
                     <motion.button
                         className={
                             `mt-5 w-full py-3 px-4 bg-gradient-to-r from-sky-500

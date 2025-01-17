@@ -17,9 +17,9 @@ const signup = async (req, res) => {
         }
         const userAlreadyExists = await User.findOne({ email })
 
-        // if (userAlreadyExists) {
-        //     return res.status(400).json({ success: false, message: "User already exists" })
-        // }
+        if (userAlreadyExists) {
+            return res.status(400).json({ success: false, message: "User already exists" })
+        }
 
         const hashedPassword = await bcryptjs.hash(password, 10)
         const verificationToken = Math.floor(100000 + Math.random() * 900000).toString()
@@ -103,7 +103,7 @@ const login = async (req, res) => {
         const user = await User.findOne({ email })
         if (!user) return res.status(400).json({
             success: false,
-            message: "Invalid user name"
+            message: "User not found"
         })
 
         const isPasswordValid = await bcryptjs.compare(password, user.password)

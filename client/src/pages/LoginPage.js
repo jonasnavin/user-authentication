@@ -4,6 +4,7 @@ import { Mail, Lock, LoaderCircle } from 'lucide-react'
 import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import DataContext from '../context/DataContext'
+import { useAuthStore } from '../store/authStore'
 
 const LoginPage = () => {
 
@@ -13,14 +14,16 @@ const LoginPage = () => {
         viewPassword, setViewPassword
     } = useContext(DataContext)
 
-    const isLoading = false
+    const { login, error, isLoading } = useAuthStore()
 
-
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault()
-        setEmail("")
-        setPassword("")
-        setViewPassword(false)
+        try {
+            const response = await login(email, password)
+
+        } catch (error) {
+            console.log(error.response.data.message)
+        }
     }
 
     useEffect(() => {
@@ -65,6 +68,12 @@ const LoginPage = () => {
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                     />
+                    {error ? (
+                        <p className='text-md text-red-500 mb-3'>
+                            {error}
+                        </p>
+                    ) : (null)
+                    }
                     <div className="flex items-center mb-6">
                         <Link
                             to={'/forgot-password'}

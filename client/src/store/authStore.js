@@ -23,11 +23,23 @@ export const useAuthStore = create(set => ({
         }
     },
 
+    login: async(email, password) => {
+        set({isLoading: true, error: null})
+        try {
+            const response = await axios.post(`${API_URL}/login`, {email, password})
+            set({user: response.data.user, isAuthenticated: true, isLoading: false})
+        } catch (error) {
+            set({error: error.response.data.message, isLoading: false})
+            throw error
+        }
+    },
+
     verifyEmail: async (code) => {
         set({ isLoading: true, error: null })
         try {
             const response = await axios.post(`${API_URL}/verify-email`, { code })
             set({ user: response.data.user, isAuthenticated: true, isLoading: false })
+            return response
         } catch (error) {
             set({ error: error.response.data.message, isLoading: false })
             throw error
@@ -41,7 +53,6 @@ export const useAuthStore = create(set => ({
             set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false })
         } catch (error) {
             set({ error: null, isAuthenticated: false, isCheckingAuth: false })
-            throw error
         }
     }
 }))
