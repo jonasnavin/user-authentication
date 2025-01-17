@@ -36,15 +36,13 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
 
-  const { checkAuth, isAuthenticated, isCheckingAuth, user } = useAuthStore()
+  const { checkAuth, isCheckingAuth } = useAuthStore()
 
   useEffect(() => {
     checkAuth()
   }, [checkAuth])
 
-  const loading = true
-
-  if (loading) return <Spinner />
+  if (isCheckingAuth) return <Spinner />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-sky-900 to-cyan-900 flex items-center justify-center">
