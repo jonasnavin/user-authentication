@@ -6,6 +6,7 @@ import EmailVerificationPage from './pages/EmailVerificationPage'
 import { Bounce, ToastContainer } from 'react-toastify'
 import { useAuthStore } from './store/authStore'
 import HomePage from './pages/HomePage'
+import Spinner from './components/Spinner'
 
 const RedirectAuthenticatedUser = ({ children }) => {
 
@@ -40,6 +41,10 @@ const App = () => {
   useEffect(() => {
     checkAuth()
   }, [checkAuth])
+
+  const loading = true
+
+  if (loading) return <Spinner />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-sky-900 to-cyan-900 flex items-center justify-center">
