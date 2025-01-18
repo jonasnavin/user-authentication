@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { LoaderCircle } from "lucide-react"
 import { motion } from "framer-motion"
 import { toast } from 'react-toastify'
 
 import DataContext from "../context/DataContext"
 import { useAuthStore } from "../store/authStore"
+import Button from "../components/Button"
 
 const EmailVerificationPage = () => {
 
@@ -106,7 +106,7 @@ const EmailVerificationPage = () => {
                                 key={index}
                                 ref={el => inputRefs.current[index] = el}
                                 type="text"
-                                name={`verification input - ${index + 1}`}
+                                id={`verification input-${index + 1}`}
                                 maxLength={"6"}
                                 value={digit}
                                 onChange={e => handleChange(index, e.target.value)}
@@ -126,21 +126,11 @@ const EmailVerificationPage = () => {
                         </p>
                     ) : (null)
                     }
-                    <motion.button
-                        className={
-                            `mt-5 w-full py-3 px-4 bg-gradient-to-r from-sky-500
-                            to-cyan-600 text-white flex justify-center
-                            font-bold rounded-lg shadow-lg hover:from-sky-600
-                            hover:to-cyan-700 focus:outline-none focus:ring-2
-                            focus:ring-sky-500 focus:ring-opacity-50 disabled:opacity-50`
-                        }
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                    <Button
+                        value="Verify Email"
                         type='submit'
                         disabled={isLoading || code.some(digit => !digit)}
-                    >
-                        {isLoading ? <LoaderCircle className="animate-spin" /> : "Verify Email"}
-                    </motion.button>
+                    />
                 </form>
             </motion.div>
         </div>

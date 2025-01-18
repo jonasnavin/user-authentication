@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion'
 import Input from '../components/Input'
-import { Mail, Lock, LoaderCircle } from 'lucide-react'
+import { Mail, Lock } from 'lucide-react'
 import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import DataContext from '../context/DataContext'
 import { useAuthStore } from '../store/authStore'
+import Button from '../components/Button'
 
 const LoginPage = () => {
 
@@ -57,6 +58,7 @@ const LoginPage = () => {
                         icon={Mail}
                         type="email"
                         placeholder="Email Address"
+                        id="email"
                         value={email}
                         onChange={e => setEmail(e.target.value)}
                     />
@@ -64,6 +66,7 @@ const LoginPage = () => {
                         icon={Lock}
                         type={viewPassword ? "text" : "password"}
                         placeholder="Password"
+                        id="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                     />
@@ -81,21 +84,13 @@ const LoginPage = () => {
                             Forgot password?
                         </Link>
                     </div>
-                    <motion.button
-                        className={
-                            `mt-5 w-full py-3 px-4 bg-gradient-to-r from-sky-500
-                            to-cyan-600 text-white flex justify-center
-                            font-bold rounded-lg shadow-lg hover:from-sky-600
-                            hover:to-cyan-700 focus:outline-none focus:ring-2
-                            focus:ring-sky-500 focus:ring-opacity-50 disabled:opacity-50`
-                        }
+                    <Button
+                        value="Login"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         type='submit'
                         disabled={isLoading || !email || !password}
-                    >
-                        {isLoading ? <LoaderCircle className="animate-spin" /> : "Login"}
-                    </motion.button>
+                    />
                 </form>
             </div>
 

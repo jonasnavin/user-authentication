@@ -38,7 +38,7 @@ const signup = async (req, res) => {
 
         await sendVerificationEmail(user.email, verificationToken)
 
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             message: "User created successfully",
             user: {
@@ -49,7 +49,7 @@ const signup = async (req, res) => {
 
     } catch (error) {
         console.log("Sign up failed", error)
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: error.message
         })
@@ -77,7 +77,7 @@ const verifyEmail = async (req, res) => {
 
         await sendWelcomeEmail(user.email, user.name)
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Email verified successfully",
             user: {
@@ -88,7 +88,7 @@ const verifyEmail = async (req, res) => {
 
     } catch (error) {
         console.log("Email verification failed", error)
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: error.message
         })
@@ -117,7 +117,7 @@ const login = async (req, res) => {
         user.lastLogin = new Date()
         await user.save()
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Logged in successfully",
             user: {
@@ -128,7 +128,7 @@ const login = async (req, res) => {
 
     } catch (error) {
         console.log("Login failed", error)
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: error.message
         })
@@ -136,8 +136,8 @@ const login = async (req, res) => {
 }
 
 const logout = async (req, res) => {
-    res.clearCookie("token")
-    res.status(200).json({
+    await res.clearCookie("token")
+    return res.status(200).json({
         success: true,
         message: "Logged out successfully"
     })
@@ -162,14 +162,14 @@ const forgotPassword = async (req, res) => {
 
         await sendPasswordResetEmail(user.email, `${CLIENT_URL}/reset-password/${resetToken}`)
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "Password reset link sent successfully"
         })
 
     } catch (error) {
         console.log("Forget password operation failed", error)
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: error.message
         })
@@ -177,17 +177,24 @@ const forgotPassword = async (req, res) => {
 }
 
 const resetPassword = async (req, res) => {
+
     const { token } = req.params
+    const { password } = req.body
+
     try {
         const user = await User.findOne({
             resetPasswordToken: token,
             resetPasswordExpiresAt: { $gt: Date.now() }
-        })
+        }).select("-password")
+
         if (!user) return res.status(400).json({
             success: false,
             message: "Invalid or expired reset token"
         })
 
+        const hashedPassword = await bcryptjs.hash(password, 10)
+
+        user.password = hashedPassword
         user.resetPasswordToken = undefined
         user.resetPasswordExpiresAt = undefined
 
@@ -195,13 +202,14 @@ const resetPassword = async (req, res) => {
 
         await sendPasswordResetSuccessEmail(user.email)
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            message: "Password reset successful"
+            message: "Password reseted successfully",
+            user
         })
     } catch (error) {
         console.log("Password reset failed", error)
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: error.message
         })
@@ -215,13 +223,13 @@ const checkAuth = async (req, res) => {
             success: false,
             message: "Authentication error"
         })
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             user
         })
     } catch (error) {
         console.log("Error in aunthentication", error)
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: error.message
         })

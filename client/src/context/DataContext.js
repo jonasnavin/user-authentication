@@ -10,6 +10,7 @@ export const DataProvider = ({ children }) => {
 
     const [code, setCode] = useState(["", "", "", "", "", ""])
     const [viewPassword, setViewPassword] = useState(false)
+    const [viewConfirmPassword, setViewConfirmPassword] = useState(false)
 
     return (
         <DataContext.Provider value={{
@@ -17,7 +18,8 @@ export const DataProvider = ({ children }) => {
             email, setEmail,
             password, setPassword,
             code, setCode,
-            viewPassword, setViewPassword
+            viewPassword, setViewPassword,
+            viewConfirmPassword, setViewConfirmPassword
         }}>
             {children}
         </DataContext.Provider>

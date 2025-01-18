@@ -11,7 +11,6 @@ export const useAuthStore = create(set => ({
     error: null,
     isLoading: false,
     isCheckingAuth: true,
-    message: null,
 
     signup: async (name, email, password) => {
         set({ isLoading: true, error: null })
@@ -68,11 +67,22 @@ export const useAuthStore = create(set => ({
     },
 
     forgotPassword: async (email) => {
-        set({ isLoading: true, error: null })
+        set({ isLoading: true, error: null, })
         try {
-            const response = await axios.post(`${API_URL}/forgot-password`, { email })
-            set({ message: response.data.message, isLoading: false })
+            await axios.post(`${API_URL}/forgot-password`, { email })
+            set({ isLoading: false })
         } catch (error) {
+            set({ error: error.response.data.message, isLoading: false })
+        }
+    },
+
+    resetPassword: async (token, password) => {
+        set({ isLoading: true, error: null, })
+        try {
+            const response = await axios.post(`${API_URL}/reset-password/${token}`, { password })
+            set({ user: response.data.user, isLoading: false, isAuthenticated: true, })
+        } catch (error) {
+            console.log(error)
             set({ error: error.response.data.message, isLoading: false })
         }
     }

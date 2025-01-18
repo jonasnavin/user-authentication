@@ -1,14 +1,15 @@
 import { motion } from "framer-motion"
 import { useAuthStore } from "../store/authStore"
 import { format } from "date-fns"
+import Button from "../components/Button"
 
 
 
 const HomePage = () => {
 
-  const { user, logout } = useAuthStore()
+  const { user, logout, isLoading } = useAuthStore()
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
       await logout()
     } catch (error) {
@@ -72,20 +73,11 @@ const HomePage = () => {
         transition={{ delay: 0.6 }}
         className="mt-4"
       >
-        <motion.button
-        whileHover={{scale: 1.05}}
-        whileTap={{scale: 0.95}}
-        onClick={handleLogout}
-        className={
-          `w-full py-3 bg-gradient-to-r from-sky-500 to-cyan-600
-          text-white font-bold rounded-lg shadow-lg hover:from-sky-600
-          hover:to-cyan-700 focus:outline-none focus:ring-2
-          focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-gray-900`
-        }
-        >
-          Logout
-        </motion.button>
-
+        <Button
+          value="Logout"
+          onClick={handleLogout}
+          disabled={isLoading}
+        />
       </motion.div>
 
     </motion.div>

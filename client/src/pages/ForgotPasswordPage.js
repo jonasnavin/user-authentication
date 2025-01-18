@@ -3,8 +3,9 @@ import { useAuthStore } from "../store/authStore"
 import { useContext, useState } from "react"
 import DataContext from "../context/DataContext"
 import Input from "../components/Input"
-import { ArrowLeft, LoaderCircle, Mail } from "lucide-react"
+import { ArrowLeft, Mail } from "lucide-react"
 import { Link } from "react-router-dom"
+import Button from "../components/Button"
 
 const ForgotPasswordPage = () => {
 
@@ -51,24 +52,16 @@ const ForgotPasswordPage = () => {
                             icon={Mail}
                             type="email"
                             placeholder="Email Address"
+                            id="email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
                         />
-                        <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        <Button
+                        value="Send Reset Link"
                         type='submit'
-                        className={
-                            `mt-5 w-full py-3 px-4 bg-gradient-to-r from-sky-500
-                            to-cyan-600 text-white flex justify-center
-                            font-bold rounded-lg shadow-lg hover:from-sky-600
-                            hover:to-cyan-700 focus:outline-none focus:ring-2
-                            focus:ring-sky-500 focus:ring-opacity-50 disabled:opacity-50`
-                        }
-                    >
-                        {isLoading ? <LoaderCircle className="animate-spin" /> : "Send Reset Link"}
-                    </motion.button>
+                        disabled={isLoading || !email}
+                        />
                     </form>
                 ) : (
                     <div className="text-center">

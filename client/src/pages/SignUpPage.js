@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion'
 import Input from '../components/Input'
-import { User, Mail, Lock, LoaderCircle } from 'lucide-react'
+import { User, Mail, Lock } from 'lucide-react'
 import { useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter'
 import axios from 'axios'
 import DataContext from '../context/DataContext'
 import { useAuthStore } from '../store/authStore'
+import Button from '../components/Button'
 
 const SignUpPage = () => {
 
@@ -17,7 +18,7 @@ const SignUpPage = () => {
         viewPassword, setViewPassword
     } = useContext(DataContext)
 
-    const {signup, error, isLoading} = useAuthStore()
+    const { signup, error, isLoading } = useAuthStore()
 
     const navigate = useNavigate()
 
@@ -66,6 +67,7 @@ const SignUpPage = () => {
                         icon={User}
                         type="text"
                         placeholder="Full Name"
+                        id="fullName"
                         value={name}
                         onChange={e => setName(e.target.value)}
                     />
@@ -73,6 +75,7 @@ const SignUpPage = () => {
                         icon={Mail}
                         type="email"
                         placeholder="Email Address"
+                        id="email"
                         value={email}
                         onChange={e => setEmail(e.target.value)}
                     />
@@ -80,6 +83,7 @@ const SignUpPage = () => {
                         icon={Lock}
                         type={viewPassword ? "text" : "password"}
                         placeholder="Password"
+                        id="password"
                         value={password}
                         minLength="8"
                         onChange={e => setPassword(e.target.value)}
@@ -91,21 +95,11 @@ const SignUpPage = () => {
                     ) : (null)
                     }
                     <PasswordStrengthMeter password={password} />
-                    <motion.button
-                        className={
-                            `mt-5 w-full py-3 px-4 bg-gradient-to-r from-sky-500
-                            to-cyan-600 text-white flex justify-center
-                            font-bold rounded-lg shadow-lg hover:from-sky-600
-                            hover:to-cyan-700 focus:outline-none focus:ring-2
-                            focus:ring-sky-500 focus:ring-opacity-50 disabled:opacity-50`
-                        }
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                    <Button
+                        value="Sign Up"
                         type='submit'
                         disabled={isLoading || !name || !email || !password}
-                    >
-                        {isLoading ? <LoaderCircle className="animate-spin" /> : "Sign Up"}
-                    </motion.button>
+                    />
                 </form>
             </div>
             <div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>

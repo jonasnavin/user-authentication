@@ -8,6 +8,7 @@ import { useAuthStore } from './store/authStore'
 import HomePage from './pages/HomePage'
 import Spinner from './components/Spinner'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 const RedirectAuthenticatedUser = ({ children }) => {
 
@@ -69,8 +70,14 @@ const App = () => {
             <ForgotPasswordPage />
           </RedirectAuthenticatedUser>
         } />
+        <Route path={`/reset-password/:token`} element={
+          <RedirectAuthenticatedUser>
+            <ResetPasswordPage />
+          </RedirectAuthenticatedUser>
+        } />
       </Routes>
       <ToastContainer
+        position='top-right'
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={true}
