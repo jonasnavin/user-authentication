@@ -7,6 +7,7 @@ import { Bounce, ToastContainer } from 'react-toastify'
 import { useAuthStore } from './store/authStore'
 import HomePage from './pages/HomePage'
 import Spinner from './components/Spinner'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
 
 const RedirectAuthenticatedUser = ({ children }) => {
 
@@ -27,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to={'/login'} replace />
   }
 
-  if (!user.isVerified) {
+  if (!user?.isVerified) {
     return <Navigate to={'/verify-email'} replace />
   }
 
@@ -63,6 +64,11 @@ const App = () => {
           </RedirectAuthenticatedUser>
         } />
         <Route path='/verify-email' element={<EmailVerificationPage />} />
+        <Route path='/forgot-password' element={
+          <RedirectAuthenticatedUser>
+            <ForgotPasswordPage />
+          </RedirectAuthenticatedUser>
+        } />
       </Routes>
       <ToastContainer
         autoClose={5000}

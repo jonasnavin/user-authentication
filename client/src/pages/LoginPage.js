@@ -19,8 +19,7 @@ const LoginPage = () => {
     const handleLogin = async (e) => {
         e.preventDefault()
         try {
-            const response = await login(email, password)
-
+            await login(email, password)
         } catch (error) {
             console.log(error.response.data.message)
         }

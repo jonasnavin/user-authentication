@@ -164,7 +164,7 @@ const forgotPassword = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            messgae: "Password reset link sent successfully"
+            message: "Password reset link sent successfully"
         })
 
     } catch (error) {
@@ -213,7 +213,7 @@ const checkAuth = async (req, res) => {
         const user = await User.findById(req.userId).select("-password")
         if (!user) return res.status(400).json({
             success: false,
-            message: "User not found"
+            message: "Authentication error"
         })
         res.status(200).json({
             success: true,
