@@ -198,6 +198,10 @@ const resetPassword = async (req, res) => {
         user.resetPasswordToken = undefined
         user.resetPasswordExpiresAt = undefined
 
+        generateTokenAndSetCookie(res, user._id)
+
+        user.lastLogin = new Date()
+
         await user.save()
 
         await sendPasswordResetSuccessEmail(user.email)

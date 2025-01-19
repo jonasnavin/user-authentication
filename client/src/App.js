@@ -70,11 +70,12 @@ const App = () => {
             <ForgotPasswordPage />
           </RedirectAuthenticatedUser>
         } />
-        <Route path={`/reset-password/:token`} element={
+        <Route path="/reset-password/:token" element={
           <RedirectAuthenticatedUser>
             <ResetPasswordPage />
           </RedirectAuthenticatedUser>
         } />
+        <Route path="*" element={<Navigate to={'/'} replace />} />
       </Routes>
       <ToastContainer
         position='top-right'
