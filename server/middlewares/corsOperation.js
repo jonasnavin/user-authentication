@@ -1,4 +1,6 @@
-const whiteList = ["http://localhost:3000"]
+const { CLIENT_URL } = require("../configs/config")
+
+const whiteList = [CLIENT_URL]
 
 const corsOperation = {
     origin: (origin, callback) => {

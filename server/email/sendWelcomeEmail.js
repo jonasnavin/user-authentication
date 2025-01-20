@@ -1,4 +1,4 @@
-const { APP_ADMIN } = require("../configs/config")
+const { APP_ADMIN, CLIENT_URL } = require("../configs/config")
 const { transporter } = require("../configs/nodemailerConfig")
 const { WELCOME_EMAIL_TEMPLATE } = require("./emailTemplates")
 
@@ -8,7 +8,7 @@ const sendWelcomeEmail = async (email, name) => {
         "[Recipient's Name]": name,
         "[Company Name]": "User Authentication",
         "[Support Email]": APP_ADMIN,
-        "[Home Page]": "http://localhost:3000"
+        "[Home Page]": CLIENT_URL
     }
 
     const strReplace = /\[(Recipient's Name|Company Name|Support Email|Home Page)\]/g

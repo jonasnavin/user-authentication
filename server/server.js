@@ -4,7 +4,7 @@ const cors = require('cors')
 
 const { connectDB } = require("./db/connectDB")
 const authRoutes = require("./routes/authRoutes")
-const { PORT } = require("./configs/config")
+const { PORT, NODE_ENV } = require("./configs/config")
 const { corsOperation } = require("./middlewares/corsOperation")
 
 const app = express()
@@ -14,6 +14,8 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use('/api/auth', authRoutes)
+
+console.log(NODE_ENV)
 
 app.listen(PORT, () => {
     connectDB()
